@@ -1,7 +1,7 @@
 package com.shoppingcart.eBazzar.service.product;
 
-import com.shoppingcart.eBazzar.Repository.category.CategoryRepository;
-import com.shoppingcart.eBazzar.Repository.product.ProductRepository;
+import com.shoppingcart.eBazzar.Repository.CategoryRepository;
+import com.shoppingcart.eBazzar.Repository.ProductRepository;
 import com.shoppingcart.eBazzar.exception.ProductNotFoundException;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Category;

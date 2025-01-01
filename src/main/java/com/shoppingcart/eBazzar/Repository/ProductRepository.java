@@ -1,4 +1,4 @@
-package com.shoppingcart.eBazzar.Repository.product;
+package com.shoppingcart.eBazzar.Repository;
 
 import com.shoppingcart.eBazzar.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
