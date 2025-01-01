@@ -3,9 +3,11 @@ package com.shoppingcart.eBazzar.service.product;
 import com.shoppingcart.eBazzar.Repository.category.CategoryRepository;
 import com.shoppingcart.eBazzar.Repository.product.ProductRepository;
 import com.shoppingcart.eBazzar.exception.ProductNotFoundException;
+import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Category;
 import com.shoppingcart.eBazzar.model.Product;
 import com.shoppingcart.eBazzar.requests.AddProductRequest;
+import com.shoppingcart.eBazzar.requests.UpdateProductRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -63,8 +65,23 @@ public class ProductService implements IProductService {
 
 
     @Override
-    public void updateProduct(Product product, Long productId) {
+    public Product updateProduct(UpdateProductRequest req, Long productId) {
+            return productRepository.findById(productId)
+                    .map(ep -> updateExistingProduct(ep, req))
+                    .map(productRepository :: save)
+                    .orElseThrow(()-> new ResourceNotFoundException("The resource not found Exception"));
+    }
 
+    private Product updateExistingProduct(Product exPro, UpdateProductRequest req){
+        exPro.setName(req.getName());
+        exPro.setBrand(req.getBrand());
+        exPro.setPrice(req.getPrice());
+        exPro.setInventory(req.getInventory());
+        exPro.setDescription(req.getDescription());
+
+        Category category = categoryRepository.findByName(req.getCategory().getName());
+        exPro.setCategory(category);
+        return  exPro;
     }
 
     @Override
