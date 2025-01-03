@@ -8,7 +8,6 @@ import com.shoppingcart.eBazzar.dto.ProductDto;
 import com.shoppingcart.eBazzar.exception.ProductNotFoundException;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Category;
-import com.shoppingcart.eBazzar.model.Image;
 import com.shoppingcart.eBazzar.model.Product;
 import com.shoppingcart.eBazzar.requests.AddProductRequest;
 import com.shoppingcart.eBazzar.requests.UpdateProductRequest;
@@ -52,44 +51,55 @@ public class ProductService implements IProductService {
                 request.getPrice(),
                 request.getInventory(),
                 request.getDescription(),
-                category
-        );
+                category);
     }
 
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow( () -> new ProductNotFoundException("Product Not Found!"));
+                .orElseThrow(() -> new ProductNotFoundException("Product Not Found!"));
     }
 
     @Override
     public void deleteProductById(Long id) {
         productRepository.findById(id)
                 .ifPresentOrElse(
-                        productRepository::delete,  // Action if product exists
-                        () -> { throw new ProductNotFoundException("Product Not Found!"); }  // Action if product doesn't exist
+                        productRepository::delete, // Action if product exists
+                        () -> {
+                            throw new ProductNotFoundException("Product Not Found!");
+                        } // Action if product doesn't exist
                 );
     }
 
-
     @Override
     public Product updateProduct(UpdateProductRequest req, Long productId) {
-            return productRepository.findById(productId)
-                    .map(ep -> updateExistingProduct(ep, req))
-                    .map(productRepository :: save)
-                    .orElseThrow(()-> new ResourceNotFoundException("The resource not found Exception"));
+        Product existingProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("The resource not found Exception"));
+        existingProduct = updateExistingProduct(existingProduct, req);
+        return productRepository.save(existingProduct);
+
     }
 
-    private Product updateExistingProduct(Product exPro, UpdateProductRequest req){
-        exPro.setName(req.getName());
-        exPro.setBrand(req.getBrand());
-        exPro.setPrice(req.getPrice());
-        exPro.setInventory(req.getInventory());
-        exPro.setDescription(req.getDescription());
+    public Product updateExistingProduct(Product existingProduct, UpdateProductRequest req) {
+        existingProduct.setName(req.getName());
+        existingProduct.setBrand(req.getBrand());
+        existingProduct.setPrice(req.getPrice());
+        existingProduct.setInventory(req.getInventory());
+        existingProduct.setDescription(req.getDescription());
 
-        Category category = categoryRepository.findByName(req.getCategory().getName());
-        exPro.setCategory(category);
-        return  exPro;
+        // Check if category name is provided in the request
+        if (req.getCategory() != null && req.getCategory().getName() != null) {
+            // Fetch the Category by its name
+            Category category = categoryRepository.findByName(req.getCategory().getName());
+
+            if (category == null) {
+                throw new ResourceNotFoundException("Category not found");
+            }
+
+            existingProduct.setCategory(category);
+        }
+
+        return existingProduct;
     }
 
     @Override
@@ -133,8 +143,7 @@ public class ProductService implements IProductService {
         productDto.setImages(
                 imageRepository.findByProductId(product.getId()).stream()
                         .map(image -> modelMapper.map(image, ImageDto.class))
-                        .toList()
-        );
+                        .toList());
         return productDto;
     }
 
@@ -151,6 +160,5 @@ public class ProductService implements IProductService {
     public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
         return productRepository.findByCategoryNameAndBrand(category, brand);
     }
-
 
 }

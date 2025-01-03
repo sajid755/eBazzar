@@ -1,7 +1,6 @@
 package com.shoppingcart.eBazzar.service.image;
 
 import com.shoppingcart.eBazzar.Repository.ImageRepository;
-import com.shoppingcart.eBazzar.Repository.ProductRepository;
 import com.shoppingcart.eBazzar.dto.ImageDto;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Image;
@@ -19,22 +18,21 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ImageService implements IImageService{
+public class ImageService implements IImageService {
 
     private final ImageRepository imageRepository;
     private final ProductService productService;
 
-
     @Override
     public Image getImageById(Long id) {
         return imageRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Image not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Image not Found"));
     }
 
     @Override
     public void deleteImageById(Long id) {
-        imageRepository.findById(id).ifPresentOrElse(imageRepository::delete, () ->{
-            throw new ResourceNotFoundException("No image found with id: "+id);
+        imageRepository.findById(id).ifPresentOrElse(imageRepository::delete, () -> {
+            throw new ResourceNotFoundException("No image found with id: " + id);
         });
 
     }
@@ -63,8 +61,7 @@ public class ImageService implements IImageService{
                 savedImageDto.add(new ImageDto(
                         savedImage.getId(),
                         savedImage.getFileName(),
-                        savedImage.getDownloadUrl()
-                ));
+                        savedImage.getDownloadUrl()));
 
             } catch (IOException | SQLException e) {
                 throw new RuntimeException("Error saving image: " + e.getMessage(), e);
@@ -73,7 +70,6 @@ public class ImageService implements IImageService{
 
         return savedImageDto;
     }
-
 
     @Override
     public void updateImage(MultipartFile file, Long imageId) {
