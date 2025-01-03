@@ -1,5 +1,6 @@
 package com.shoppingcart.eBazzar.service.product;
 
+import com.shoppingcart.eBazzar.dto.ProductDto;
 import com.shoppingcart.eBazzar.model.Product;
 import com.shoppingcart.eBazzar.requests.AddProductRequest;
 import com.shoppingcart.eBazzar.requests.UpdateProductRequest;
@@ -18,4 +19,9 @@ public interface IProductService {
     List<Product> getProductsByName(String name);
     List<Product> getProductsByBrandAndName(String brand, String name);
     Long countProductsByBrandAndName(String brand, String name);
+    ProductDto convertToDto(Product product);
+
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
+    List<Product> getProductsByCategoryAndBrand(String category, String brand);
 }

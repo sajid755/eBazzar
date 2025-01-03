@@ -1,16 +1,22 @@
 package com.shoppingcart.eBazzar.service.product;
 
 import com.shoppingcart.eBazzar.Repository.CategoryRepository;
+import com.shoppingcart.eBazzar.Repository.ImageRepository;
 import com.shoppingcart.eBazzar.Repository.ProductRepository;
+import com.shoppingcart.eBazzar.dto.ImageDto;
+import com.shoppingcart.eBazzar.dto.ProductDto;
 import com.shoppingcart.eBazzar.exception.ProductNotFoundException;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Category;
+import com.shoppingcart.eBazzar.model.Image;
 import com.shoppingcart.eBazzar.model.Product;
 import com.shoppingcart.eBazzar.requests.AddProductRequest;
 import com.shoppingcart.eBazzar.requests.UpdateProductRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +26,8 @@ public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
 
     @Override
     public Product addProduct(AddProductRequest request) {
@@ -118,4 +126,31 @@ public class ProductService implements IProductService {
     public Long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
     }
+
+    @Override
+    public ProductDto convertToDto(Product product) {
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        productDto.setImages(
+                imageRepository.findByProductId(product.getId()).stream()
+                        .map(image -> modelMapper.map(image, ImageDto.class))
+                        .toList()
+        );
+        return productDto;
+    }
+
+    @Override
+    public List<ProductDto> getConvertedProducts(List<Product> products) {
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (Product product : products) {
+            productDtos.add(convertToDto(product));
+        }
+        return productDtos;
+    }
+
+    @Override
+    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
+        return productRepository.findByCategoryNameAndBrand(category, brand);
+    }
+
+
 }
