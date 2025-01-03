@@ -9,5 +9,8 @@ public class ImageDto {
     private String downloadUrl;
 
     public ImageDto(Long id, String fileName, String downloadUrl) {
+        this.id = id;
+        this.fileName = fileName;
+        this.downloadUrl = downloadUrl;
     }
 }
