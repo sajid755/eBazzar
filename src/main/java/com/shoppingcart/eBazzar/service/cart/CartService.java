@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 
-import com.shoppingcart.eBazzar.Repository.CartItemRepository;
 import com.shoppingcart.eBazzar.Repository.CartRepository;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Cart;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 public class CartService implements ICartService {
 
     private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
 
     @Override
     public Cart getCart(Long id) {
