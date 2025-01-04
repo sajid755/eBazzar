@@ -42,11 +42,13 @@ public class Cart {
     }
 
     public void updateTotalAmount() {
-        this.totalAmount = BigDecimal.ZERO;
-        for (CartItem item : items) {
-            BigDecimal unitPrice = item.getUnitPrice() != null ? item.getUnitPrice() : BigDecimal.ZERO;
-            this.totalAmount = this.totalAmount.add(unitPrice.multiply(BigDecimal.valueOf(item.getQuantity())));
-        }
+        this.totalAmount = items.stream().map(item -> {
+            BigDecimal unitPrice = item.getUnitPrice();
+            if (unitPrice == null) {
+                return BigDecimal.ZERO;
+            }
+            return unitPrice.multiply(BigDecimal.valueOf(item.getQuantity()));
+        }).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }
