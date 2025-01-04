@@ -8,6 +8,11 @@ public class ImageDto {
     private String fileName;
     private String downloadUrl;
 
+    // No-argument constructor (required by ModelMapper)
+    public ImageDto() {
+    }
+
+    // Parameterized constructor
     public ImageDto(Long id, String fileName, String downloadUrl) {
         this.id = id;
         this.fileName = fileName;
