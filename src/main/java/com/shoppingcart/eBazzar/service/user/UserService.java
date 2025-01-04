@@ -1,9 +1,12 @@
 package com.shoppingcart.eBazzar.service.user;
 
 import java.util.*;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.shoppingcart.eBazzar.Repository.UserRepository;
+import com.shoppingcart.eBazzar.dto.UserDto;
 import com.shoppingcart.eBazzar.exception.AlreadyExistsException;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.User;
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public User getUserById(Long userId) {
@@ -57,6 +61,11 @@ public class UserService implements IUserService {
     public void deleteUser(Long userId) {
         userRepository.findById(userId).ifPresentOrElse(userRepository::delete,
                 () -> new ResourceNotFoundException("User Not Found!"));
+    }
+
+    @Override
+    public UserDto convertUserToDto(User user) {
+        return modelMapper.map(user, UserDto.class);
     }
 
 }
