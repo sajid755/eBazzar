@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.stereotype.Service;
 
 import com.shoppingcart.eBazzar.Repository.OrderRepository;
@@ -32,13 +33,17 @@ public class OrderService implements IOrderService {
     @Override
     public Order placeOrder(Long userId) {
         Cart cart = cartService.getCartByUserId(userId);
+
         Order order = createOrder(cart);
         List<OrderItem> orderItemList = createOrderItems(order, cart);
         order.setOrderItems(new HashSet<>(orderItemList));
         order.setTotalAmount(calculateTotalAmount(orderItemList));
+
         Order savedOrder = orderRepository.save(order);
         cartService.clearCart(cart.getId());
+
         return savedOrder;
+
     }
 
     @Override
@@ -83,6 +88,13 @@ public class OrderService implements IOrderService {
         }
 
         return totalPrice;
+    }
+
+    @Override
+    public List<Order> getUserOrders(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        return orders;
+        // return orders.stream().map(this::convertToDto).toList();
     }
 
 }
