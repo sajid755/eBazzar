@@ -5,9 +5,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import com.shoppingcart.eBazzar.dto.OrderDto;
 
 import com.shoppingcart.eBazzar.Repository.OrderRepository;
 import com.shoppingcart.eBazzar.Repository.ProductRepository;
@@ -29,6 +32,7 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Order placeOrder(Long userId) {
@@ -47,8 +51,9 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order getOrder(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resouce Not Found"));
+    public OrderDto getOrder(Long id) {
+        return orderRepository.findById(id).map(this::convertToDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Order Not Found!"));
     }
 
     private Order createOrder(Cart cart) {
@@ -91,10 +96,14 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> getUserOrders(Long userId) {
+    public List<OrderDto> getUserOrders(Long userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
-        return orders;
-        // return orders.stream().map(this::convertToDto).toList();
+        return orders.stream().map(this::convertToDto).collect(Collectors.toList());
+
+    }
+
+    private OrderDto convertToDto(Order order) {
+        return modelMapper.map(order, OrderDto.class);
     }
 
 }
