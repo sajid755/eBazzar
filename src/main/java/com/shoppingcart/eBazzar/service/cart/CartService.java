@@ -3,9 +3,6 @@ package com.shoppingcart.eBazzar.service.cart;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.shoppingcart.eBazzar.Repository.CartItemRepository;

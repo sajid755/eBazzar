@@ -1,7 +1,6 @@
 package com.shoppingcart.eBazzar.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 

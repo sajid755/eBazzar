@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -97,9 +98,14 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<OrderDto> getUserOrders(Long userId) {
-        List<Order> orders = orderRepository.findByUserId(userId);
-        return orders.stream().map(this::convertToDto).collect(Collectors.toList());
 
+        List<Order> orders = orderRepository.findByUserId(userId);
+
+        if (orders.isEmpty()) {
+            throw new ResourceNotFoundException("No Order Found!");
+        }
+
+        return orders.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     private OrderDto convertToDto(Order order) {
