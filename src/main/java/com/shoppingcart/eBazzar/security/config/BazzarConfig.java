@@ -1,4 +1,4 @@
-package com.shoppingcart.eBazzar.config;
+package com.shoppingcart.eBazzar.security.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
