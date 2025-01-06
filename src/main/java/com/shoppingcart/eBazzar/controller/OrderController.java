@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shoppingcart.eBazzar.dto.OrderDto;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
-import com.shoppingcart.eBazzar.model.Order;
 import com.shoppingcart.eBazzar.response.ApiResponse;
 import com.shoppingcart.eBazzar.service.order.IOrderService;
 
@@ -28,7 +27,7 @@ public class OrderController {
     @PostMapping("/order")
     public ResponseEntity<ApiResponse> createOrder(@RequestParam Long userId) {
         try {
-            Order order = orderService.placeOrder(userId);
+            OrderDto order = orderService.placeOrder(userId);
             return ResponseEntity.ok(new ApiResponse("Item Order Success!", order));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

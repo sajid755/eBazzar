@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
+import com.shoppingcart.eBazzar.model.Cart;
+import com.shoppingcart.eBazzar.model.User;
 import com.shoppingcart.eBazzar.response.ApiResponse;
 import com.shoppingcart.eBazzar.service.cart.ICartItemService;
 import com.shoppingcart.eBazzar.service.cart.ICartService;
+import com.shoppingcart.eBazzar.service.user.UserService;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +26,17 @@ import lombok.RequiredArgsConstructor;
 public class CartItemController {
     private final ICartItemService cartItemService;
     private final ICartService cartService;
+    private final UserService userService;
 
     @PostMapping("/item/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId,
+    public ResponseEntity<ApiResponse> addItemToCart(
             @RequestParam Long productId,
             @RequestParam Integer quantity) {
         try {
-            if (cartId == null) {
-                cartId = cartService.initializeNewCart();
-            }
-            cartItemService.addItemToCart(cartId, productId, quantity);
+            User user = userService.getUserById(2L);
+            Cart cart = cartService.initializeNewCart(user);
+
+            cartItemService.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Add Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

@@ -1,7 +1,7 @@
 package com.shoppingcart.eBazzar.service.order;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +35,7 @@ public class OrderService implements IOrderService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Order placeOrder(Long userId) {
+    public OrderDto placeOrder(Long userId) {
         Cart cart = cartService.getCartByUserId(userId);
 
         Order order = createOrder(cart);
@@ -46,7 +46,7 @@ public class OrderService implements IOrderService {
         Order savedOrder = orderRepository.save(order);
         cartService.clearCart(cart.getId());
 
-        return savedOrder;
+        return convertToDto(savedOrder);
 
     }
 
@@ -58,9 +58,9 @@ public class OrderService implements IOrderService {
 
     private Order createOrder(Cart cart) {
         Order order = new Order();
-        // order.setUser(cart.getUser());
+        order.setUser(cart.getUser());
         order.setOrderStatus(OrderStatus.PENDING);
-        order.setOrderDate(LocalDate.now());
+        order.setOrderDate(LocalDateTime.now());
         return order;
     }
 

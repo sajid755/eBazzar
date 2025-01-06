@@ -3,6 +3,7 @@ package com.shoppingcart.eBazzar.service.cart;
 import java.math.BigDecimal;
 
 import com.shoppingcart.eBazzar.model.Cart;
+import com.shoppingcart.eBazzar.model.User;
 
 public interface ICartService {
 
@@ -12,7 +13,7 @@ public interface ICartService {
 
     BigDecimal getTotalPrice(Long id);
 
-    Long initializeNewCart();
+    Cart initializeNewCart(User user);
 
     Cart getCartByUserId(Long userId);
 

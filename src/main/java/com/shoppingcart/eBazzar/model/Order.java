@@ -2,6 +2,7 @@ package com.shoppingcart.eBazzar.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.shoppingcart.eBazzar.enums.OrderStatus;
@@ -30,7 +31,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
     private BigDecimal totalAmount;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
