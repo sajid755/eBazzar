@@ -3,7 +3,17 @@
     {
       "name": "api.prefix",
       "type": "java.lang.String",
-      "description": "A description for 'api.prefix' which is Used In Controller "
+      "description": "A description for 'api.prefix' which is Used In Controller"
+    },
+    {
+      "name": "auth.token.expirationInMils",
+      "type": "long",
+      "description": "The expiration time of the JWT token in milliseconds. It is used to set the expiration date for the JWT token."
+    },
+    {
+      "name": "auth.token.jwtSecret",
+      "type": "java.lang.String",
+      "description": "The secret key used for signing and verifying JWT tokens. It should be a Base64-encoded string."
     }
   ]
 }

@@ -3,6 +3,7 @@ package com.shoppingcart.eBazzar.service.user;
 import java.util.*;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.shoppingcart.eBazzar.Repository.UserRepository;
@@ -21,6 +22,7 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User getUserById(Long userId) {
@@ -36,7 +38,7 @@ public class UserService implements IUserService {
 
         User user = new User();
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
 
