@@ -1,11 +1,18 @@
 package com.shoppingcart.eBazzar.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.shoppingcart.eBazzar.model.CartItem;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     void deleteAllByCartId(Long id);
+
+    @Modifying
+    @Query("DELETE FROM CartItem ci WHERE ci.cart.id = :cartId")
+    void deleteItemsByCartId(@Param("cartId") Long cartId);
 
 }
