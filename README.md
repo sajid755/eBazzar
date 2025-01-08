@@ -6,7 +6,9 @@ eBazzar Backend is the server-side component of the eBazzar application, built u
 
 Below is the database schema for the application:
 
-![Database Schema](assets/db.png)
+<img src="assets/db.png" alt="Database Schema" width="50%" heigth="50%">
+
+---
 
 ## 🎯 **Features**
 
