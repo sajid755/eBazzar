@@ -2,6 +2,12 @@
 
 eBazzar Backend is the server-side component of the eBazzar application, built using Spring Boot. It provides RESTful APIs to manage users, products, and orders for the eBazzar platform.
 
+## 🗂️ **Database Schema**
+
+Below is the database schema for the application:
+
+![Database Schema](assets/db.png)
+
 ## 🎯 **Features**
 
 ### 🔐 **User Authentication**
