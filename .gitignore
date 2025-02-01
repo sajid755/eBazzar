@@ -33,3 +33,4 @@ build/
 .vscode/
 
 data/db/mysql/*
+src/main/resources/application-local.properties
