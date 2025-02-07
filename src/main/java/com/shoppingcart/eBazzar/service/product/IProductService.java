@@ -2,8 +2,8 @@ package com.shoppingcart.eBazzar.service.product;
 
 import com.shoppingcart.eBazzar.dto.ProductDto;
 import com.shoppingcart.eBazzar.model.Product;
-import com.shoppingcart.eBazzar.requests.AddProductRequest;
-import com.shoppingcart.eBazzar.requests.UpdateProductRequest;
+import com.shoppingcart.eBazzar.dto.requests.AddProductRequest;
+import com.shoppingcart.eBazzar.dto.requests.UpdateProductRequest;
 
 import java.util.List;
 

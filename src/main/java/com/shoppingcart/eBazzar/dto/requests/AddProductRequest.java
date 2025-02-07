@@ -1,4 +1,4 @@
-package com.shoppingcart.eBazzar.requests;
+package com.shoppingcart.eBazzar.dto.requests;
 
 import com.shoppingcart.eBazzar.model.Category;
 import lombok.Data;
@@ -6,7 +6,8 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class UpdateProductRequest {
+public class AddProductRequest {
+    private Long id;
     private String name;
     private String brand;
     private BigDecimal price;

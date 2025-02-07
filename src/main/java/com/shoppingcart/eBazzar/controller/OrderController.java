@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shoppingcart.eBazzar.dto.OrderDto;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
-import com.shoppingcart.eBazzar.response.ApiResponse;
+import com.shoppingcart.eBazzar.dto.response.ApiResponse;
 import com.shoppingcart.eBazzar.service.order.IOrderService;
 
 import lombok.RequiredArgsConstructor;

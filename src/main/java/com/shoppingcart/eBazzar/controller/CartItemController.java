@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Cart;
 import com.shoppingcart.eBazzar.model.User;
-import com.shoppingcart.eBazzar.response.ApiResponse;
+import com.shoppingcart.eBazzar.dto.response.ApiResponse;
 import com.shoppingcart.eBazzar.service.cart.ICartItemService;
 import com.shoppingcart.eBazzar.service.cart.ICartService;
 import com.shoppingcart.eBazzar.service.user.UserService;

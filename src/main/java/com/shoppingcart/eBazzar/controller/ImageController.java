@@ -3,7 +3,7 @@ package com.shoppingcart.eBazzar.controller;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Image;
 import com.shoppingcart.eBazzar.dto.ImageDto;
-import com.shoppingcart.eBazzar.response.ApiResponse;
+import com.shoppingcart.eBazzar.dto.response.ApiResponse;
 import com.shoppingcart.eBazzar.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;

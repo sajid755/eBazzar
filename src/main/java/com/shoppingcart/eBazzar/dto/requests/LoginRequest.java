@@ -1,4 +1,4 @@
-package com.shoppingcart.eBazzar.requests;
+package com.shoppingcart.eBazzar.dto.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

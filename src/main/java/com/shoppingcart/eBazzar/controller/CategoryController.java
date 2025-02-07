@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shoppingcart.eBazzar.exception.AlreadyExistsException;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Category;
-import com.shoppingcart.eBazzar.response.ApiResponse;
+import com.shoppingcart.eBazzar.dto.response.ApiResponse;
 import com.shoppingcart.eBazzar.service.category.ICategoryService;
 
 import lombok.RequiredArgsConstructor;

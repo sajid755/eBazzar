@@ -1,4 +1,4 @@
-package com.shoppingcart.eBazzar.requests;
+package com.shoppingcart.eBazzar.dto.requests;
 
 import lombok.Data;
 

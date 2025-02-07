@@ -1,4 +1,4 @@
-package com.shoppingcart.eBazzar.response;
+package com.shoppingcart.eBazzar.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

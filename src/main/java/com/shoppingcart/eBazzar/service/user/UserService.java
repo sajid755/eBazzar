@@ -1,7 +1,5 @@
 package com.shoppingcart.eBazzar.service.user;
 
-import java.util.*;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,8 +9,8 @@ import com.shoppingcart.eBazzar.dto.UserDto;
 import com.shoppingcart.eBazzar.exception.AlreadyExistsException;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.User;
-import com.shoppingcart.eBazzar.requests.CreateUserRequest;
-import com.shoppingcart.eBazzar.requests.UserUpdateRequest;
+import com.shoppingcart.eBazzar.dto.requests.CreateUserRequest;
+import com.shoppingcart.eBazzar.dto.requests.UserUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,17 +44,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateUser(UserUpdateRequest request, Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-
-        if (optionalUser.isPresent()) {
-            User existingUser = optionalUser.get();
-            existingUser.setFirstName(request.getFirstName());
-            existingUser.setLastName(request.getLastName());
-            return userRepository.save(existingUser);
-        } else {
-            throw new ResourceNotFoundException("User not found!");
-        }
+    public User updateUser(UserUpdateRequest request, Long userId) throws ResourceNotFoundException, RuntimeException{
+        User existingUser = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        existingUser.setFirstName(request.getFirstName());
+        existingUser.setLastName(request.getLastName());
+        return userRepository.save(existingUser);
     }
 
     @Override
@@ -65,7 +57,6 @@ public class UserService implements IUserService {
                 () -> new ResourceNotFoundException("User Not Found!"));
     }
 
-    @Override
     public UserDto convertUserToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }

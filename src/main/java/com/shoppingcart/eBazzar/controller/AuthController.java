@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shoppingcart.eBazzar.requests.LoginRequest;
-import com.shoppingcart.eBazzar.response.ApiResponse;
-import com.shoppingcart.eBazzar.response.JwtResponse;
+import com.shoppingcart.eBazzar.dto.requests.LoginRequest;
+import com.shoppingcart.eBazzar.dto.response.ApiResponse;
+import com.shoppingcart.eBazzar.dto.response.JwtResponse;
 import com.shoppingcart.eBazzar.security.jwt.JwtUtils;
 import com.shoppingcart.eBazzar.security.user.ShopUserDetails;
 
