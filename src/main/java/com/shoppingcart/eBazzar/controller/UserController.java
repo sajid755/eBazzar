@@ -38,7 +38,11 @@ public class UserController {
             return ResponseEntity.ok(new ApiResponse("Create User Success!",
                     UserMapper.INSTANCE.userToUserDto(user)));
         } catch (AlreadyExistsException e) {
+
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse(e.getMessage(), null));
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

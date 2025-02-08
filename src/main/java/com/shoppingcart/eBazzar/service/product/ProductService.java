@@ -3,21 +3,21 @@ package com.shoppingcart.eBazzar.service.product;
 import com.shoppingcart.eBazzar.Repository.CategoryRepository;
 import com.shoppingcart.eBazzar.Repository.ImageRepository;
 import com.shoppingcart.eBazzar.Repository.ProductRepository;
-import com.shoppingcart.eBazzar.dto.ImageDto;
 import com.shoppingcart.eBazzar.dto.ProductDto;
+import com.shoppingcart.eBazzar.dto.requests.AddProductRequestDto;
+import com.shoppingcart.eBazzar.dto.requests.UpdateProductRequest;
 import com.shoppingcart.eBazzar.exception.ProductNotFoundException;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Category;
+import com.shoppingcart.eBazzar.model.Image;
 import com.shoppingcart.eBazzar.model.Product;
-import com.shoppingcart.eBazzar.dto.requests.AddProductRequest;
-import com.shoppingcart.eBazzar.dto.requests.UpdateProductRequest;
+import com.shoppingcart.eBazzar.utils.mapper.ImageMapper;
+import com.shoppingcart.eBazzar.utils.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,33 +25,17 @@ public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
 
+    private final CategoryIntegrationService categoryIntegrationService;
+
     @Override
-    public Product addProduct(AddProductRequest request) {
-        // check if the category is found in the DB
-        // If Yes, set it as the new product category
-        // If No, the save it as a new category
-        // The set as the new product category.
-
-        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
-                .orElseGet(() -> {
-                    Category newCategory = new Category(request.getCategory().getName());
-                    return categoryRepository.save(newCategory);
-                });
-        request.setCategory(category);
-        return productRepository.save(createProduct(request, category));
-    }
-
-    private Product createProduct(AddProductRequest request, Category category) {
-        return new Product(
-                request.getName(),
-                request.getBrand(),
-                request.getPrice(),
-                request.getInventory(),
-                request.getDescription(),
-                category);
+    public Product addProduct(AddProductRequestDto request) throws ResourceNotFoundException {
+        Category category = categoryIntegrationService.getCategoryByName(request.getCategory().getName());
+        Product product = ProductMapper.INSTANCE.AddProductRequestDtoToProduct(request);
+        product.setCategory(category);
+        category.getProducts().add(product);
+        return productRepository.save(product);
     }
 
     @Override
@@ -90,12 +74,11 @@ public class ProductService implements IProductService {
         // Check if category name is provided in the request
         if (req.getCategory() != null && req.getCategory().getName() != null) {
             // Fetch the Category by its name
-            Category category = categoryRepository.findByName(req.getCategory().getName());
-
-            if (category == null) {
-                throw new ResourceNotFoundException("Category not found");
-            }
-
+            Category category = categoryRepository.findByName(req.getCategory().getName())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+            List<Product> products = category.getProducts();
+            //baki ekahne.
+            //products.forEach(product -> if(product.get));
             existingProduct.setCategory(category);
         }
 
@@ -139,10 +122,10 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductDto convertToDto(Product product) {
-        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        ProductDto productDto = ProductMapper.INSTANCE.productToProductDto(product);
         productDto.setImages(
                 imageRepository.findByProductId(product.getId()).stream()
-                        .map(image -> modelMapper.map(image, ImageDto.class))
+                        .map(image -> ImageMapper.INSTANCE.imageToImageDto((Image) image))
                         .toList());
         return productDto;
     }

@@ -4,7 +4,7 @@ import com.shoppingcart.eBazzar.dto.ProductDto;
 import com.shoppingcart.eBazzar.exception.AlreadyExistsException;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Product;
-import com.shoppingcart.eBazzar.dto.requests.AddProductRequest;
+import com.shoppingcart.eBazzar.dto.requests.AddProductRequestDto;
 import com.shoppingcart.eBazzar.dto.requests.UpdateProductRequest;
 import com.shoppingcart.eBazzar.dto.response.ApiResponse;
 import com.shoppingcart.eBazzar.service.product.IProductService;
@@ -42,7 +42,7 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
+    public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequestDto product) {
         try {
             Product theProduct = productService.addProduct(product);
             ProductDto productDto = productService.convertToDto(theProduct);
@@ -58,10 +58,10 @@ public class ProductController {
     }
 
     @PostMapping("/bulk-add")
-    public ResponseEntity<ApiResponse> addProducts(@RequestBody List<AddProductRequest> products) {
+    public ResponseEntity<ApiResponse> addProducts(@RequestBody List<AddProductRequestDto> products) {
         List<ProductDto> addedProducts = new ArrayList<>();
         try {
-            for (AddProductRequest product : products) {
+            for (AddProductRequestDto product : products) {
                 Product theProduct = productService.addProduct(product);
                 ProductDto productDto = productService.convertToDto(theProduct);
                 addedProducts.add(productDto);

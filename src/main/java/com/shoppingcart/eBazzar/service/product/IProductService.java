@@ -2,13 +2,13 @@ package com.shoppingcart.eBazzar.service.product;
 
 import com.shoppingcart.eBazzar.dto.ProductDto;
 import com.shoppingcart.eBazzar.model.Product;
-import com.shoppingcart.eBazzar.dto.requests.AddProductRequest;
+import com.shoppingcart.eBazzar.dto.requests.AddProductRequestDto;
 import com.shoppingcart.eBazzar.dto.requests.UpdateProductRequest;
 
 import java.util.List;
 
 public interface IProductService {
-    Product addProduct(AddProductRequest product);
+    Product addProduct(AddProductRequestDto product);
     Product getProductById(Long id);
     void deleteProductById(Long id);
     Product updateProduct(UpdateProductRequest product, Long productId);

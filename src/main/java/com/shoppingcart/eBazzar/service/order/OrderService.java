@@ -1,29 +1,22 @@
 package com.shoppingcart.eBazzar.service.order;
 
+import com.shoppingcart.eBazzar.Repository.OrderRepository;
+import com.shoppingcart.eBazzar.Repository.ProductRepository;
+import com.shoppingcart.eBazzar.dto.OrderDto;
+import com.shoppingcart.eBazzar.enums.OrderStatus;
+import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
+import com.shoppingcart.eBazzar.model.*;
+import com.shoppingcart.eBazzar.service.cart.CartService;
+import com.shoppingcart.eBazzar.utils.mapper.OrderMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
-
-import com.shoppingcart.eBazzar.dto.OrderDto;
-
-import com.shoppingcart.eBazzar.Repository.OrderRepository;
-import com.shoppingcart.eBazzar.Repository.ProductRepository;
-import com.shoppingcart.eBazzar.enums.OrderStatus;
-import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
-import com.shoppingcart.eBazzar.model.Cart;
-import com.shoppingcart.eBazzar.model.CartItem;
-import com.shoppingcart.eBazzar.model.Order;
-import com.shoppingcart.eBazzar.model.OrderItem;
-import com.shoppingcart.eBazzar.model.Product;
-import com.shoppingcart.eBazzar.service.cart.CartService;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +25,6 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final ProductRepository productRepository;
-    private final ModelMapper modelMapper;
 
     @Override
     public OrderDto placeOrder(Long userId) {
@@ -46,14 +38,15 @@ public class OrderService implements IOrderService {
         Order savedOrder = orderRepository.save(order);
         cartService.clearCart(cart.getId());
 
-        return convertToDto(savedOrder);
-
+        return OrderMapper.INSTANCE.orderToOrderDto(savedOrder);
     }
 
     @Override
     public OrderDto getOrder(Long id) {
-        return orderRepository.findById(id).map(this::convertToDto)
+        Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order Not Found!"));
+
+        return OrderMapper.INSTANCE.orderToOrderDto(order);
     }
 
     private Order createOrder(Cart cart) {
@@ -104,11 +97,6 @@ public class OrderService implements IOrderService {
             throw new ResourceNotFoundException("No Order Found!");
         }
 
-        return orders.stream().map(this::convertToDto).collect(Collectors.toList());
+        return orders.stream().map(OrderMapper.INSTANCE::orderToOrderDto).collect(Collectors.toList());
     }
-
-    private OrderDto convertToDto(Order order) {
-        return modelMapper.map(order, OrderDto.class);
-    }
-
 }

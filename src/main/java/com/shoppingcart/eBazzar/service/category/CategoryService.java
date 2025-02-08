@@ -4,14 +4,16 @@ import com.shoppingcart.eBazzar.Repository.CategoryRepository;
 import com.shoppingcart.eBazzar.exception.AlreadyExistsException;
 import com.shoppingcart.eBazzar.exception.ResourceNotFoundException;
 import com.shoppingcart.eBazzar.model.Category;
+import com.shoppingcart.eBazzar.service.product.CategoryIntegrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService implements ICategoryService {
+public class CategoryService implements ICategoryService, CategoryIntegrationService {
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -22,7 +24,8 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category getCategoryByName(String name) {
-        return categoryRepository.findByName(name);
+        Optional<Category> category = categoryRepository.findByName(name);
+        return category.orElseGet(() -> addCategory(new Category(name)));
     }
 
     @Override
