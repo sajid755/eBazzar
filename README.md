@@ -60,7 +60,7 @@ Follow the instructions below to set up the backend locally with Dockerized MySQ
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/sajid-777/eBazzar.git
+   git clone https://github.com/sajid755/eBazzar.git
 
    ```
 
